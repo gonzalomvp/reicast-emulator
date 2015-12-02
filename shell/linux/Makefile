@@ -22,8 +22,6 @@ ASFLAGS :=
 LDFLAGS :=
 INCS :=
 LIBS :=
-CFLAGS := 
-CXXFLAGS :=
 
 # Platform auto-detection
 # Can be overridden by using:
@@ -108,11 +106,9 @@ else ifneq (,$(findstring lincpp,$(platform)))
 
 # Raspberry Pi 2
 else ifneq (,$(findstring rpi2,$(platform)))
-    MFLAGS += -marm -march=armv7-a -mtune=cortex-a9 -mfpu=neon -mfloat-abi=hard -funroll-loops
-    ASFLAGS += -march=armv7-a -mfpu=neon -mfloat-abi=softfp
     CFLAGS += -D TARGET_BEAGLE -D TARGET_LINUX_ARMELv7 -DARM_HARDFP -fsingle-precision-constant
-    INCS += -I/opt/vc/include/ -I/opt/vc/include/interface/vmcs_host/linux -I/opt/vc/include/interface/vcos/pthreads -I../linux-deps/include
-    LIBS += -L/opt/vc/lib/  -L../linux-deps/lib -lbcm_host
+    INCS += -I/opt/vc/include/ -I/opt/vc/include/interface/vmcs_host/linux -I/opt/vc/include/interface/vcos/pthreads
+    LIBS += -L/opt/vc/lib/ -lbcm_host
     USE_GLES := 1
 
 # BeagleBone Black
