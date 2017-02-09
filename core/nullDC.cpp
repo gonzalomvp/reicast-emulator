@@ -260,6 +260,8 @@ void LoadSettings()
 #endif
 
 	settings.bios.UseReios = cfgLoadInt("config", "bios.UseReios", 0);
+	settings.pvr.HashLogFile = cfgLoadStr("testing", "ta.HashLogFile", "");
+	settings.pvr.HashCheckFile = cfgLoadStr("testing", "ta.HashCheckFile", "");
 
 #if SUPPORT_DISPMANX
 	settings.dispmanx.Width = cfgLoadInt("dispmanx","width",640);

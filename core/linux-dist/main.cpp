@@ -195,6 +195,30 @@ void UpdateInputState(u32 port)
 	#endif
 }
 
+void UpdateVibration(u32 port, u32 value)
+{
+	#if defined(USE_EVDEV)
+		const u8 freq_l = 0x16;
+		//const u8 freq_h = 0x31;
+
+		u8 POW_POS = (value >> 8) & 0x3;
+		u8 POW_NEG = (value >> 12) & 0x3;
+		u8 FREQ = (value >> 16) & 0xFF;
+
+		double pow = (POW_POS + POW_NEG) / 7.0;
+		double pow_l = pow * (0x3B - FREQ) / 17.0;
+		double pow_r = pow * (FREQ - 0x07) / 15.0;
+
+		if (pow_l > 1.0) pow_l = 1.0;
+		if (pow_r > 1.0) pow_r = 1.0;
+
+		u16 pow_strong = (u16)(65535 * pow_l);
+		u16 pow_weak = (u16)(65535 * pow_r);
+
+		input_evdev_rumble(&evdev_controllers[port], pow_strong, pow_weak);
+	#endif
+}
+
 void os_DoEvents()
 {
 	#if defined(SUPPORT_X11)
@@ -354,7 +378,7 @@ string find_user_data_dir()
 std::vector<string> find_system_config_dirs()
 {
 	std::vector<string> dirs;
-	if (getenv("XDG_DATA_DIRS") != NULL)
+	if (getenv("XDG_CONFIG_DIRS") != NULL)
 	{
 		string s = (string)getenv("XDG_CONFIG_DIRS");
 
