@@ -123,7 +123,7 @@ else ifneq (,$(findstring rpi2,$(platform)))
     else
         INCS += -I/opt/vc/include/ -I/opt/vc/include/interface/vmcs_host/linux -I/opt/vc/include/interface/vcos/pthreads
         LIBS += -L/opt/vc/lib/ -lbcm_host
-        CFLAGS += -DVC
+        CFLAGS += -D TARGET_VIDEOCORE
         USE_OMX := 1
         USE_DISPMANX := 1
     endif
