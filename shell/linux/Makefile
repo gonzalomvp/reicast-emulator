@@ -118,10 +118,15 @@ else ifneq (,$(findstring lincpp,$(platform)))
 # Raspberry Pi 2
 else ifneq (,$(findstring rpi2,$(platform)))
     CFLAGS += -D TARGET_BEAGLE -D TARGET_LINUX_ARMELv7 -DARM_HARDFP -fsingle-precision-constant
-    INCS += -I/opt/vc/include/ -I/opt/vc/include/interface/vmcs_host/linux -I/opt/vc/include/interface/vcos/pthreads
-    LIBS += -L/opt/vc/lib/ -lbcm_host
-    USE_OMX := 1
-    USE_DISPMANX := 1
+    ifneq (,$(findstring mesa,$(platform)))
+        USE_SDL := 1
+    else
+        INCS += -I/opt/vc/include/ -I/opt/vc/include/interface/vmcs_host/linux -I/opt/vc/include/interface/vcos/pthreads
+        LIBS += -L/opt/vc/lib/ -lbcm_host
+        CFLAGS += -D TARGET_VIDEOCORE
+        USE_OMX := 1
+        USE_DISPMANX := 1
+    endif
     USE_GLES := 1
     undefine USE_X11
 
